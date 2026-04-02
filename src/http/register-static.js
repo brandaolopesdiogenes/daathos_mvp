@@ -44,8 +44,7 @@ async function registerStaticFrontend(app, config) {
     root: dist,
     prefix: "/",
     decorateReply: true,
-    index: false,
-    list: false
+    index: false
   });
 
   app.setNotFoundHandler((request, reply) => {

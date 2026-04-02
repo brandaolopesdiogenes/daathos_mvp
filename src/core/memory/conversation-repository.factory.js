@@ -33,9 +33,16 @@ function createConversationRepository(env = process.env) {
     case "supabase": {
       const connectionString = env.DATABASE_URL || env.SUPABASE_DB_URL || env.SUPABASE_DATABASE_URL;
       if (!connectionString || !String(connectionString).trim()) {
-        throw new Error(
-          "CONVERSATION_STORE=postgres|supabase requires DATABASE_URL or SUPABASE_DB_URL (Postgres connection string)"
+        // Em PaaS (Railway) é comum copiar .env.example com CONVERSATION_STORE=postgres sem URL —
+        // isso derruba o processo antes do listen e o healthcheck fica "service unavailable".
+        console.warn(
+          "[DAATHOS] CONVERSATION_STORE=postgres|supabase sem DATABASE_URL/SUPABASE_DB_URL — usando memória in-process. " +
+            "Configure DATABASE_URL ou use CONVERSATION_STORE=memory."
         );
+        const max = Number(env.CONVERSATION_MEMORY_MAX || env.EXECUTION_LOG_MAX || 5000);
+        return new InMemoryConversationRepository({
+          maxEntries: Number.isFinite(max) && max > 0 ? max : 5000
+        });
       }
       const tableName = env.CONVERSATION_TABLE_NAME || "daathos_conversations";
       const autoMigrate = env.CONVERSATION_AUTO_MIGRATE !== "false" && env.CONVERSATION_AUTO_MIGRATE !== "0";
