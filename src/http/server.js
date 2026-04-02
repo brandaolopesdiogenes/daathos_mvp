@@ -4,7 +4,7 @@ const cors = require("@fastify/cors");
 const helmet = require("@fastify/helmet");
 const { getAppConfig } = require("../config/app-config");
 const { buildLoggerOptions } = require("./logger-factory");
-const { registerErrorHandler } = require("./error-handler");
+const { registerErrorHandler, registerJsonNotFoundHandler } = require("./error-handler");
 const daathosRoutes = require("./routes/daathos.routes");
 const connectorsRoutes = require("./routes/connectors.routes");
 const eventDecisionsRoutes = require("./routes/event-decisions.routes");
@@ -46,7 +46,10 @@ async function buildApi() {
 
   registerErrorHandler(app, config);
 
-  await registerStaticFrontend(app, config);
+  const spaRegistered = await registerStaticFrontend(app, config);
+  if (!spaRegistered) {
+    registerJsonNotFoundHandler(app);
+  }
 
   return app;
 }

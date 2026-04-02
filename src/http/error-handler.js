@@ -60,18 +60,31 @@ function registerErrorHandler(app, config) {
       }
     });
   });
+}
 
-  app.setNotFoundHandler((request, reply) => {
-    request.log.warn({ reqId: request.id, path: request.url }, "Route not found");
-    return reply.code(404).send({
-      success: false,
-      error: {
-        code: "NOT_FOUND",
-        message: "Route not found",
-        details: { path: request.url, requestId: request.id }
-      }
-    });
+/**
+ * Resposta JSON padrão para rota inexistente (404).
+ * @param {import('fastify').FastifyRequest} request
+ * @param {import('fastify').FastifyReply} reply
+ */
+function sendNotFoundJson(request, reply) {
+  request.log.warn({ reqId: request.id, path: request.url }, "Route not found");
+  return reply.code(404).send({
+    success: false,
+    error: {
+      code: "NOT_FOUND",
+      message: "Route not found",
+      details: { path: request.url, requestId: request.id }
+    }
   });
 }
 
-module.exports = { registerErrorHandler };
+/**
+ * Fastify só permite um `setNotFoundHandler` por instância. Use quando não houver SPA estático.
+ * @param {import('fastify').FastifyInstance} app
+ */
+function registerJsonNotFoundHandler(app) {
+  app.setNotFoundHandler((request, reply) => sendNotFoundJson(request, reply));
+}
+
+module.exports = { registerErrorHandler, registerJsonNotFoundHandler, sendNotFoundJson };
