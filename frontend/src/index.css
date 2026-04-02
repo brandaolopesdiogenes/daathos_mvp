@@ -1,0 +1,73 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: dark;
+  --os-bg-deep: #030712;
+  --os-bg-panel: rgba(15, 23, 42, 0.75);
+  --os-border: rgba(56, 189, 248, 0.15);
+  --os-accent: #22d3ee;
+  --os-accent-dim: rgba(34, 211, 238, 0.45);
+  --os-glow: rgba(34, 211, 238, 0.08);
+}
+
+body {
+  margin: 0;
+  font-family: Outfit, ui-sans-serif, system-ui, sans-serif;
+  background: var(--os-bg-deep);
+  min-height: 100vh;
+}
+
+.font-mono-tech {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+}
+
+@keyframes os-scan {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+@keyframes os-pulse-ring {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(34, 211, 238, 0);
+  }
+}
+
+@keyframes os-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.os-animate-in {
+  animation: os-fade-in 0.38s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.os-shine-border {
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(34, 211, 238, 0.12) 45%,
+    rgba(34, 211, 238, 0.2) 50%,
+    rgba(34, 211, 238, 0.12) 55%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: os-scan 4s linear infinite;
+}
+
+.os-status-pulse {
+  animation: os-pulse-ring 2.2s ease-in-out infinite;
+}

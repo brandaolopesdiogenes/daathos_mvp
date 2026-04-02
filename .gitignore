@@ -1,0 +1,9 @@
+node_modules/
+.env
+.env.*
+!.env.example
+npm-debug.log*
+.DS_Store
+
+# O backend inteiro deve estar no repositório (não adicione "src" aqui).
+# Se .env já foi commitado por engano: git rm --cached .env && git commit -m "Remove .env do Git"

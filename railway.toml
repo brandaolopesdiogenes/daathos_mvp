@@ -1,0 +1,11 @@
+# Railway — https://railway.com/docs
+# O projeto detecta o Dockerfile na raiz. Variáveis sensíveis no painel (Variables).
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+restartPolicyType = "ON_FAILURE"
+healthcheckPath = "/health"
+healthcheckTimeout = 60
