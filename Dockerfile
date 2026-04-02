@@ -4,16 +4,14 @@
 FROM node:22-alpine AS frontend-build
 WORKDIR /app/frontend
 
-COPY frontend/package.json frontend/package-lock.json ./
-RUN npm ci
-
+# Copia o app inteiro. Usamos `npm install` (não `npm ci`): o lock gerado no Windows
+# costuma faltar entradas opcionais (@emnapi/*) que o Linux exige — npm ci falha no Alpine.
 COPY frontend/ ./
 
-# Opcional: injeta a mesma API key no build do Vite (embutida via import.meta.env).
 ARG VITE_DAATHOS_API_KEY=
 ENV VITE_DAATHOS_API_KEY=$VITE_DAATHOS_API_KEY
 
-RUN npm run build
+RUN npm install --no-audit --no-fund && npm run build
 
 FROM node:22-alpine AS production
 WORKDIR /app
